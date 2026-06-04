@@ -1,0 +1,52 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nju": "https://www.nju.edu.cn/en/#",
+    "schema": "https://schema.org/",
+    "name": "schema:name",
+    "url": "schema:url",
+    "description": "schema:description",
+    "foundingDate": "schema:foundingDate",
+    "address": "schema:address",
+    "logo": "schema:logo",
+    "sameAs": "schema:sameAs",
+    "department": "schema:department",
+    "AuthenticationService": "nju:AuthenticationService",
+    "LibraryDiscoveryService": "nju:LibraryDiscoveryService",
+    "humanURL": "schema:url",
+    "baseURL": "nju:baseURL",
+    "loginMethod": "nju:loginMethod"
+  },
+  "@type": "CollegeOrUniversity",
+  "@id": "https://www.nju.edu.cn/en/",
+  "name": "Nanjing University",
+  "url": "https://www.nju.edu.cn/en/",
+  "description": "Nanjing University (NJU), founded in 1902 in Nanjing, Jiangsu, China, is one of China's oldest and most prestigious research universities.",
+  "foundingDate": "1902",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Nanjing",
+    "addressRegion": "Jiangsu",
+    "addressCountry": "CN"
+  },
+  "sameAs": [
+    "https://github.com/MCG-NJU",
+    "https://www.linkedin.com/school/nanjing-university/"
+  ],
+  "department": [
+    {
+      "@type": "AuthenticationService",
+      "@id": "https://authserver.nju.edu.cn/authserver/",
+      "name": "Nanjing University Unified Identity Authentication (CAS SSO)",
+      "humanURL": "https://itsc.nju.edu.cn/itsc_en/68/6a/c26812a485482/page.htm",
+      "baseURL": "https://authserver.nju.edu.cn/authserver/",
+      "loginMethod": ["password", "verification-code", "biometric", "qr-code"]
+    },
+    {
+      "@type": "LibraryDiscoveryService",
+      "@id": "https://lib.nju.edu.cn/",
+      "name": "Nanjing University Library Discovery & OPAC",
+      "humanURL": "https://lib.nju.edu.cn/"
+    }
+  ]
+}
