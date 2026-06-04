@@ -1,0 +1,80 @@
+---
+aid: nanjing
+name: Nanjing University
+description: >-
+  Nanjing University (NJU), founded in 1902 and located in Nanjing, Jiangsu,
+  China, is one of China's oldest and most prestigious research universities and
+  is ranked #145 in the QS World University Rankings 2025. The university
+  operates a unified identity authentication (CAS-based single sign-on) platform
+  at authserver.nju.edu.cn and runs library discovery systems (OPAC and Summon)
+  and a campus map, but it does not publish a public, documented developer API
+  program or an open-data portal. The footprint cataloged here reflects only
+  publicly observable, institution-facing systems; no public API endpoints,
+  signup, or developer documentation were confirmed.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/nanjing/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Research
+  - China
+  - Authentication
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: nanjing:auth
+    name: Nanjing University Unified Identity Authentication (CAS SSO)
+    description: >-
+      Nanjing University operates a unified identity authentication platform
+      providing single sign-on across university systems. The login service is a
+      CAS (Central Authentication Service) deployment supporting password,
+      verification code, biometric, and QR-code login methods. It is intended
+      for institutional accounts and is not a publicly documented developer API;
+      no public client registration or developer documentation was confirmed.
+    humanURL: https://itsc.nju.edu.cn/itsc_en/68/6a/c26812a485482/page.htm
+    baseURL: https://authserver.nju.edu.cn/authserver/
+    tags: [ Authentication, SSO, CAS, Identity ]
+    properties:
+      - type: Documentation
+        url: https://itsc.nju.edu.cn/itsc_en/68/6a/c26812a485482/page.htm
+      - type: Authentication
+        url: https://authserver.nju.edu.cn/authserver/login
+  - aid: nanjing:library
+    name: Nanjing University Library Discovery & OPAC
+    description: >-
+      Nanjing University Library provides an online public access catalog (OPAC)
+      and the Summon next-generation discovery service for searching its
+      collections and licensed databases. These are end-user web search systems;
+      no public, documented library API (such as an Alma/Primo REST API or
+      OAI-PMH endpoint) was confirmed as publicly available.
+    humanURL: https://lib.nju.edu.cn/
+    tags: [ Library, Discovery, OPAC, Summon, Catalog ]
+    properties:
+      - type: Documentation
+        url: https://lib.nju.edu.cn/
+common:
+  - type: Website
+    url: https://www.nju.edu.cn/en/
+  - type: GitHub
+    url: https://github.com/MCG-NJU
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/nanjing-university/
+  - type: Authentication
+    url: https://authserver.nju.edu.cn/authserver/login
+  - type: Plans
+    url: plans/nanjing-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/nanjing-rate-limits.yml
+  - type: FinOps
+    url: finops/nanjing-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
+---
