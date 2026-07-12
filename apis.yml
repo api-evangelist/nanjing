@@ -58,6 +58,8 @@ apis:
       - type: Documentation
         url: https://lib.nju.edu.cn/
 common:
+  - type: DomainSecurity
+    url: security/nanjing-domain-security.yml
   - type: Website
     url: https://www.nju.edu.cn/en/
   - type: GitHub
