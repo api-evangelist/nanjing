@@ -38,6 +38,9 @@ position: Consumer
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/nanjing.png
 url: https://raw.githubusercontent.com/api-evangelist/nanjing/refs/heads/main/apis.yml
+x-api-posture: no-product-api
+x-api-posture-basis: observed
+x-api-posture-note: "The footprint cataloged here reflects only publicly observable, institution-facing systems; no public API endpoints, signup, or developer documentation were confirmed."
 tags:
   - Education
   - Higher Education
