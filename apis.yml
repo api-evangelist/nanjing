@@ -1,85 +1,419 @@
 aid: nanjing
 name: Nanjing University
 description: >-
-  Nanjing University (NJU), founded in 1902 and located in Nanjing, Jiangsu,
-  China, is one of China's oldest and most prestigious research universities and
-  is ranked #145 in the QS World University Rankings 2025. The university
-  operates a unified identity authentication (CAS-based single sign-on) platform
-  at authserver.nju.edu.cn and runs library discovery systems (OPAC and Summon)
-  and a campus map, but it does not publish a public, documented developer API
-  program or an open-data portal. The footprint cataloged here reflects only
-  publicly observable, institution-facing systems; no public API endpoints,
-  signup, or developer documentation were confirmed.
+  Nanjing University (NJU, 南京大学), founded in 1902 in Nanjing, Jiangsu, is one of China's
+  oldest research universities and a member of the C9 League. It publishes no developer
+  portal, no API gateway, no API programme and no OpenAPI of its own, and this profile
+  records that plainly. What it does operate — directly, on its own hosts, inside CERNET
+  address space — is a genuine estate of institution-run machine-readable surfaces, almost
+  all of it built and run by the university's e-Science Center: its own Shibboleth identity
+  provider at idp.nju.edu.cn, registered in CARSI and republished to eduGAIN; a CAS single
+  sign-on service whose ticket-validation endpoints answer the CAS 2.0 and 3.0 protocol to
+  anonymous callers; a public open-source mirror at mirrors.nju.edu.cn serving JSON
+  configuration endpoints; a GitLab instance at git.nju.edu.cn whose REST API v4 the mirror
+  site itself consumes; a BookStack documentation service at doc.nju.edu.cn that publishes a
+  complete 79-endpoint REST API reference publicly and gates the API on an NJU token; and
+  Seafile, SeaTable and Vaultwarden deployments that answer unauthenticated service-discovery
+  JSON. None of this is an API product, none of it is registerable by an outsider, and the
+  contracts behind the service deployments are the upstream products', not NJU's engineering —
+  so no vendor specification is saved here under NJU's name. The June 2026 profile of this
+  institution saw none of it and recorded only a login page.
+x-type: university
+x-category: Public Research University
 type: Index
 deliveryModel:
   model: saas
   open_source: false
-  commercial: true
-  callable_host: false
-  label: Hosted service · you call their endpoint
-  confidence: medium
+  commercial: false
+  callable_host: true
+  label: Institution-operated services · callable hosts, no API product
+  confidence: high
   source:
-  - pricing
-  generated: '2026-08-28'
-  method: derived
+    - probed
+  generated: '2026-09-01'
+  method: probed
 accessModel:
   pricing: free
-  onboarding: unknown
+  onboarding: none
   trial: false
-  try_now: false
-  public: false
-  label: Free
-  confidence: medium
+  try_now: true
+  public: true
+  label: >-
+    Free · no registration for the public read-only endpoints; every substantive surface needs
+    an NJU institutional account, which outsiders cannot obtain
+  confidence: high
   source:
-    - plans
-  generated: '2026-07-22'
-  method: derived
+    - authentication
+    - probed
+  generated: '2026-09-01'
+  method: probed
 position: Consumer
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/nanjing.png
 url: https://raw.githubusercontent.com/api-evangelist/nanjing/refs/heads/main/apis.yml
 x-api-posture: no-product-api
 x-api-posture-basis: observed
-x-api-posture-note: "The footprint cataloged here reflects only publicly observable, institution-facing systems; no public API endpoints, signup, or developer documentation were confirmed."
+x-api-posture-note: >-
+  Nanjing University operates callable, institution-run hosts but sells and publishes no API
+  product: there is no developer portal, no API key or OAuth client registration, no published
+  API terms of service and no OpenAPI. Access to anything beyond service-discovery endpoints
+  requires an NJU institutional account issued by central IT.
 tags:
-  - Education
-  - Higher Education
   - University
-  - Research
+  - Higher Education
+  - Education
   - China
+  - C9 League
+  - Research
+  - Identity Federation
   - Authentication
+  - Single Sign-On
+  - Research Computing
+  - Open Source Mirror
+  - Version Control
+  - Library
 created: '2026-06-03'
-modified: '2026-07-25'
+modified: '2026-09-01'
 specificationVersion: '0.23'
 apis:
-  - aid: nanjing:auth
+  - aid: nanjing:idp-shibboleth
+    name: Nanjing University Shibboleth Identity Provider (SAML 2.0 metadata)
+    description: >-
+      Nanjing University's own Shibboleth Identity Provider. It publishes SAML 2.0 metadata at
+      the canonical /idp/shibboleth location — an EntityDescriptor with an IDPSSODescriptor and
+      an AttributeAuthorityDescriptor, shibmd scope nju.edu.cn, SSO and SLO endpoints on 443 and
+      SOAP attribute-query / artifact-resolution endpoints on 8443. The library uses it in
+      production as the CARSI route to licensed resources off campus. Recorded honestly: the
+      document NJU serves is Shibboleth's unedited sample metadata, validUntil 2020-02-17 and
+      still carrying the shipped placeholder UIInfo, so the deployment is curated in CARSI's
+      registration rather than on NJU's own host.
+    humanURL: https://itsc.nju.edu.cn/
+    baseURL: https://idp.nju.edu.cn/idp/
+    x-operator: institution
+    x-operator-evidence: >-
+      idp.nju.edu.cn is under NJU's own registrable domain and resolves with no CNAME to
+      219.219.122.95, APNIC netname CERNET-CN (China Education and Research Network, Nanjing
+      Regional Network). No managed-IdP platform, CDN or vendor host sits between NJU and this
+      metadata. Probed 2026-09-01: /idp/shibboleth 200 application/xml (14,402 bytes),
+      /idp/profile/SAML2/Redirect/SSO 400 (correct rejection of a request with no SAMLRequest).
+    tags: [Identity Federation, SAML, Shibboleth, Authentication]
+    properties:
+      - type: IdentityFederation
+        url: https://idp.nju.edu.cn/idp/shibboleth
+      - type: Documentation
+        url: identity-federation/nanjing-identity-federation.yml
+  - aid: nanjing:carsi-edugain
+    name: Nanjing University CARSI / eduGAIN Federation Registration
+    description: >-
+      NJU's entry in CARSI (CERNET Authentication and Resource Sharing Infrastructure), China's
+      national research and education identity federation, republished into eduGAIN. Entity id
+      671521, entityID https://idp.nju.edu.cn/idp/shibboleth, display names "Nanjing University"
+      and "南京大学(Nanjing University)", scope nju.edu.cn, roles IDPSSODescriptor and
+      AttributeAuthorityDescriptor, first seen 2020-02-18. No REFEDS entity categories, Sirtfi or
+      Code of Conduct assertions are declared on the entry.
+    humanURL: https://www.carsi.edu.cn/
+    baseURL: https://technical.edugain.org/api.php
+    x-operator: federation
+    x-operator-evidence: >-
+      A federation is shared by definition and the IdP behind the entry is the institution's, so
+      this is recorded as NJU's relationship rather than filtered out as a shared host. Probed
+      2026-09-01: the eduGAIN technical database returned 725 CARSI entities (200,
+      application/json) and exactly one scoped to nju.edu.cn — this one.
+    tags: [Identity Federation, eduGAIN, CARSI, SAML]
+    properties:
+      - type: APIReference
+        url: https://technical.edugain.org/api.php
+      - type: Registration
+        url: https://technical.edugain.org/api.php?action=list_entities&fed_id=CARSI&format=json
+  - aid: nanjing:cas-sso
     name: Nanjing University Unified Identity Authentication (CAS SSO)
     description: >-
-      Nanjing University operates a unified identity authentication platform
-      providing single sign-on across university systems. The login service is a
-      CAS (Central Authentication Service) deployment supporting password,
-      verification code, biometric, and QR-code login methods. It is intended
-      for institutional accounts and is not a publicly documented developer API;
-      no public client registration or developer documentation was confirmed.
+      NJU's central single sign-on, a CAS deployment supporting password, verification-code,
+      biometric and QR-code login. It is not a developer API and there is no public service
+      registration — a relying application must be registered by NJU IT — but the ticket
+      validation endpoints do speak the CAS protocol to anonymous callers and return
+      application/xml, which makes this a real machine-readable institution-operated surface
+      rather than the login page the June 2026 profile recorded.
     humanURL: https://itsc.nju.edu.cn/itsc_en/68/6a/c26812a485482/page.htm
     baseURL: https://authserver.nju.edu.cn/authserver/
+    x-operator: institution
+    x-operator-evidence: >-
+      authserver.nju.edu.cn resolves to 219.219.115.212, APNIC netname CERNET-CN. Probed
+      2026-09-01: /authserver/login 200; /authserver/serviceValidate and /authserver/p3/serviceValidate
+      both 200 application/xml returning <cas:serviceResponse> with
+      <cas:authenticationFailure code="INVALID_TICKET">; /authserver/.well-known/openid-configuration
+      404 (JSON) — no OIDC surface is published.
     tags: [Authentication, SSO, CAS, Identity]
     properties:
       - type: Documentation
         url: https://itsc.nju.edu.cn/itsc_en/68/6a/c26812a485482/page.htm
       - type: Authentication
         url: https://authserver.nju.edu.cn/authserver/login
+  - aid: nanjing:mirrors
+    name: NJU Mirror (open-source software mirror)
+    description: >-
+      The university's public open-source mirror, run by the NJU e-Science Center and open to
+      anyone on the internet. Beyond the package trees themselves, the site serves JSON
+      configuration endpoints that are ordinary unauthenticated reads: /configs/news/index.json
+      (announcements), /configs/documentations/index.json (the mirrored-distribution help index,
+      18.5KB), and /configs/cards/esci.json (the e-Science service directory). It does not publish
+      a MirrorZ /mirrorz.json descriptor — that was probed and returns 404.
+    humanURL: https://mirrors.nju.edu.cn/
+    baseURL: https://mirrors.nju.edu.cn/configs/
+    x-operator: institution
+    x-operator-evidence: >-
+      mirrors.nju.edu.cn resolves to 210.28.130.3 in CERNET-CN space, alongside the rest of the
+      e-Science estate (git .14, doc/hpc .10, box .6, pass .11, table .18). Probed 2026-09-01:
+      /configs/documentations/index.json 200 application/json, /configs/news/index.json 200
+      application/json, /configs/cards/esci.json 200 application/json. The edge sets a bcheck
+      cookie and 302s a first request back to itself; with the cookie every route answers.
+    tags: [Open Source Mirror, Package Repository, Research Computing]
+    properties:
+      - type: APIReference
+        url: https://mirrors.nju.edu.cn/configs/documentations/index.json
+      - type: Documentation
+        url: https://help.mirror.nju.edu.cn/
+  - aid: nanjing:gitlab
+    name: NJU e-Science Code Hosting (GitLab REST API v4)
+    description: >-
+      An institution-operated GitLab instance for NJU staff and students. Its REST API v4 is real
+      and in production — the university's own mirror site fetches
+      /api/v4/projects/2412/issues to render announcements — but non-browser clients currently
+      meet an Anubis proof-of-work bot challenge on every /api/v4 route. The contract is GitLab's,
+      not NJU's engineering, so no specification is saved here; the deployment is the surface.
+    humanURL: https://git.nju.edu.cn/
+    baseURL: https://git.nju.edu.cn/api/v4
+    x-operator: institution
+    x-operator-evidence: >-
+      git.nju.edu.cn resolves to 210.28.130.14, CERNET-CN, on NJU's own domain, and is listed as
+      "代码托管" in the e-Science service directory at
+      https://mirrors.nju.edu.cn/configs/cards/esci.json. Probed 2026-09-01: /api/v4/version,
+      /api/v4/metadata and /api/v4/projects/2412/issues each return HTTP 200 carrying the Anubis
+      challenge page rather than the resource — live and gated, not dead.
+    tags: [Version Control, GitLab, Developer Tools]
+    properties:
+      - type: APIReference
+        url: https://git.nju.edu.cn/
+  - aid: nanjing:doc-bookstack
+    name: NJU e-Science Document Service API
+    description: >-
+      The e-Science Center's documentation platform (a BookStack deployment) publishes a complete
+      public REST API reference at /api/docs — 79 endpoints across books, chapters, pages, shelves,
+      attachments, images, users, roles, recycle bin, audit log, search and content permissions,
+      with GET, POST, PUT and DELETE. This is the only surface in the profile that documents an API
+      to the public. The API itself is token-gated and returns a clean JSON error envelope
+      unauthenticated; tokens are issued from an NJU account profile, so an outsider cannot obtain
+      one. The machine-readable description at /api/docs.json sits behind the same token.
+    humanURL: https://doc.nju.edu.cn/api/docs
+    baseURL: https://doc.nju.edu.cn/api
+    x-operator: institution
+    x-operator-evidence: >-
+      doc.nju.edu.cn resolves to 210.28.130.10, CERNET-CN, and is branded "e-Science Document";
+      the HPC site links its user manuals into it. Probed 2026-09-01: /api/docs 200 text/html
+      (270KB reference), /api/books 401 application/json
+      {"error":{"message":"No authorization token found on the request","code":401}},
+      /api/docs.json 401. The contract shape is BookStack's; the deployment and its content are
+      NJU's, so the surface is recorded and the product's generic specification is not.
+    tags: [Documentation, Content API, Research Computing]
+    properties:
+      - type: APIReference
+        url: https://doc.nju.edu.cn/api/docs
+      - type: Documentation
+        url: https://doc.nju.edu.cn/
+  - aid: nanjing:box
+    name: NJU Box (南大云盘) — Seafile deployment
+    description: >-
+      The university's cloud storage service for staff and students, a self-hosted Seafile
+      13.0.25 instance branded "南大云盘 NJU Box". Service discovery is anonymous — /api2/ping/
+      returns "pong" and /api2/server-info/ returns version, encryption parameters, branding and
+      feature flags as JSON — while everything else needs an NJU account token. Seafile's Web API
+      is the contract; NJU operates the deployment.
+    humanURL: https://box.nju.edu.cn/
+    baseURL: https://box.nju.edu.cn/api2
+    x-operator: institution
+    x-operator-evidence: >-
+      box.nju.edu.cn resolves to 210.28.130.6, CERNET-CN, listed as "云盘" in the e-Science service
+      directory. Probed 2026-09-01: /api2/ping/ 200 application/json "pong"; /api2/server-info/ 200
+      application/json reporting version 13.0.25 and desktop-custom-brand "南大云盘 NJU Box".
+    tags: [Storage, File Sharing, Research Computing]
+    properties:
+      - type: Authentication
+        url: https://box.nju.edu.cn/accounts/login/
+  - aid: nanjing:table
+    name: NJU Table (南大表格) — SeaTable deployment
+    description: >-
+      An institution-hosted SeaTable 6.1.9 enterprise-edition deployment offering collaborative
+      tables to NJU users. /api2/ping/ and /server-info/ answer anonymously; the rest of the
+      SeaTable API requires an account token. The contract is SeaTable's, the deployment NJU's.
+    humanURL: https://table.nju.edu.cn/
+    baseURL: https://table.nju.edu.cn
+    x-operator: institution
+    x-operator-evidence: >-
+      table.nju.edu.cn resolves to 210.28.130.18, CERNET-CN, listed as "协同表格" in the e-Science
+      service directory. Probed 2026-09-01: /api2/ping/ 200 application/json "pong"; /server-info/
+      200 application/json {"version":"6.1.9","edition":"enterprise edition"}; page title
+      "南大表格 NJU Table".
+    tags: [Collaboration, Database, Research Computing]
+    properties:
+      - type: Authentication
+        url: https://table.nju.edu.cn/
+  - aid: nanjing:pass
+    name: NJU Password Manager (Vaultwarden deployment)
+    description: >-
+      A self-hosted Vaultwarden 2026.6.0 instance offering a Bitwarden-protocol password vault to
+      NJU users. /alive returns a server timestamp and /api/config returns server identity,
+      version, git hash and the vault/API/identity base URLs, both unauthenticated; the vault
+      itself requires account credentials. Recorded as an institution-operated deployment of
+      third-party software.
+    humanURL: https://pass.nju.edu.cn/
+    baseURL: https://pass.nju.edu.cn/api
+    x-operator: institution
+    x-operator-evidence: >-
+      pass.nju.edu.cn resolves to 210.28.130.11, CERNET-CN, listed as "密码管理" in the e-Science
+      service directory. Probed 2026-09-01: /alive 200 application/json;
+      /api/config 200 application/json reporting Vaultwarden 2026.6.0 with
+      environment.vault https://pass.nju.edu.cn.
+    tags: [Security, Password Management, Research Computing]
+    properties:
+      - type: Authentication
+        url: https://pass.nju.edu.cn/
+  - aid: nanjing:hpc
+    name: NJU e-Science High Performance Computing Center
+    description: >-
+      Nanjing University's supercomputing service, operated by the e-Science Center under the
+      Collaborative Innovation Center of Advanced Microstructures. It publishes hardware and
+      software resource inventories, a maintenance log (nodes added through January 2026), a
+      charging schedule and internal-transfer instructions, a monitoring page and user manuals
+      hosted on doc.nju.edu.cn. The account and job service portal is gated to NJU users; the
+      site's own Joomla Atom/RSS feed endpoint is broken (HTTP 500). No public API.
+    humanURL: https://hpc.nju.edu.cn/zh/
+    baseURL: https://hpc.nju.edu.cn/
+    x-operator: institution
+    x-operator-evidence: >-
+      hpc.nju.edu.cn resolves to 210.28.130.10, CERNET-CN, and the site is copyright the
+      Collaborative Innovation Center of Advanced Microstructures with a Jiangsu ICP filing.
+      Probed 2026-09-01: / 200 (redirects to /zh/), documentation on doc.nju.edu.cn 200,
+      /zh/?format=feed&type=atom 500.
+    tags: [Research Computing, HPC, Supercomputing]
+    properties:
+      - type: Documentation
+        url: https://doc.nju.edu.cn/books/efe93
+      - type: Pricing
+        url: https://hpc.nju.edu.cn/zh/hpc/3119-charges
+  - aid: nanjing:chat-assistant
+    name: NJU Intelligent Assistant Platform (小蓝鲸)
+    description: >-
+      "小蓝鲸" — the university's own AI assistant platform for NJU users, a single-page
+      application backed by an astron-agent deployment with Casdoor as its identity provider and
+      an iFlytek Spark application id. It is institution-operated AI tooling, but it exposes no
+      public API: every API path probed (/v1/models, /api/v1/models, /api/config,
+      /backend-api/models, /api/version) returns the same 2,706-byte SPA shell, a soft-200 rather
+      than a contract.
+    humanURL: https://chat.nju.edu.cn/
+    baseURL: https://chat.nju.edu.cn/
+    x-operator: institution
+    x-operator-evidence: >-
+      chat.nju.edu.cn resolves to 202.119.32.33, APNIC netname CERNET-CN, on NJU's own domain, and
+      the page is titled "南京大学-小蓝鲸智能助手平台". Its runtime-config.js declares
+      CASDOOR_URL http://chat.nju.edu.cn:30800 and CASDOOR_APP astron-agent-app — an NJU-hosted
+      deployment, not a redirect to a vendor's SaaS. Probed 2026-09-01: / 200; all five candidate
+      API paths 200 with the SPA shell.
+    tags: [Artificial Intelligence, AI Assistant, Campus Services]
+    properties:
+      - type: AITooling
+        url: https://chat.nju.edu.cn/
+  - aid: nanjing:opac
+    name: Nanjing University Library Catalog (OPAC)
+    description: >-
+      The library's catalog host. It is live but restricted to the campus network: every route,
+      including an OAI-PMH probe, returns HTTP 403 with the body "请使用南大VPN访问!" ("please access
+      via the NJU VPN"). Recorded as gated rather than absent — this is a finding about network
+      policy, not evidence that the catalog does not exist.
+    humanURL: https://lib.nju.edu.cn/
+    baseURL: https://opac.nju.edu.cn/
+    x-operator: institution
+    x-operator-evidence: >-
+      opac.nju.edu.cn is under NJU's own domain and is linked from the library's own site. Probed
+      2026-09-01: / 403 (nginx, VPN notice), /oai?verb=Identify 403 with the same body.
+    tags: [Library, Catalog, Discovery]
+    properties:
+      - type: LibraryCatalog
+        url: https://lib.nju.edu.cn/
+  - aid: nanjing:ror
+    name: Nanjing University in the Research Organization Registry (ROR)
+    description: >-
+      Nanjing University's registration in ROR, the open registry of research organizations:
+      ROR ID 01rxvg760, domain nju.edu.cn, established 1902, with cross-references to ISNI
+      0000 0001 2314 964X, GRID grid.41156.37, Wikidata Q683580 and Crossref Funder ID
+      501100008048. This is a fact about the institution held on a registry every research
+      organization shares; the registry's contract belongs to ROR, and only the membership is
+      recorded here.
+    humanURL: https://ror.org/01rxvg760
+    baseURL: https://api.ror.org/organizations/01rxvg760
+    x-operator: registry
+    x-operator-evidence: >-
+      Probed 2026-09-01: https://api.ror.org/organizations/01rxvg760 200 application/json,
+      returning names "Nanjing University" / "南京大学", domains ["nju.edu.cn"] and the external
+      identifiers above. Shared by every registered organization by design — a membership, not a
+      misattribution.
+    tags: [Registry, Research, Identifiers]
+    properties:
+      - type: Registration
+        url: https://ror.org/01rxvg760
+  - aid: nanjing:crossref-funder
+    name: Nanjing University in the Crossref Open Funder Registry
+    description: >-
+      Nanjing University's entry in the Crossref Open Funder Registry as funder 501100008048,
+      with 3,401 works recording it as a funder and two descendant funder identifiers — the
+      Jiangsu Collaborative Innovation Center for Climate Change (501100009999) and the State Key
+      Laboratory of Analytical Chemistry for Life Science (501100011400). Recorded as a registry
+      membership only. NJU is NOT a Crossref member: a members query returns one near-name match,
+      Nanjing University of Aeronautics and Astronautics, which is a different institution and is
+      deliberately not recorded here.
+    humanURL: https://www.crossref.org/services/funder-registry/
+    baseURL: https://api.crossref.org/funders/501100008048
+    x-operator: registry
+    x-operator-evidence: >-
+      Probed 2026-09-01: https://api.crossref.org/funders/501100008048 200 application/json,
+      name "Nanjing University", work-count 3401; https://api.crossref.org/members?query=Nanjing+University
+      200 with no Nanjing University member record.
+    tags: [Registry, Research, Identifiers, Funding]
+    properties:
+      - type: Registration
+        url: https://api.crossref.org/funders/501100008048
 common:
-  - type: DomainSecurity
-    url: security/nanjing-domain-security.yml
   - type: Website
     url: https://www.nju.edu.cn/en/
-  - type: GitHub
+  - type: Documentation
+    url: https://doc.nju.edu.cn/
+  - type: APIReference
+    url: https://doc.nju.edu.cn/api/docs
+  - type: GitHubOrganization
     url: https://github.com/MCG-NJU
+  - type: GitHubOrganization
+    url: https://github.com/nju-websoft
   - type: LinkedIn
     url: https://www.linkedin.com/school/nanjing-university/
+  - type: IdentityFederation
+    url: https://idp.nju.edu.cn/idp/shibboleth
+  - type: IdentityFederation
+    url: identity-federation/nanjing-identity-federation.yml
+  - type: ResearchComputing
+    url: https://hpc.nju.edu.cn/zh/
+  - type: LibraryCatalog
+    url: https://lib.nju.edu.cn/
+  - type: AITooling
+    url: https://chat.nju.edu.cn/
+  - type: Support
+    url: https://itsc.nju.edu.cn/
   - type: Authentication
     url: https://authserver.nju.edu.cn/authserver/login
+  - type: Authentication
+    url: authentication/nanjing-authentication.yml
+  - type: Conformance
+    url: conformance/nanjing-education-standards-conformance.yml
+  - type: DomainSecurity
+    url: security/nanjing-domain-security.yml
   - type: Plans
     url: plans/nanjing-plans-pricing.yml
   - type: RateLimits
@@ -88,8 +422,102 @@ common:
     url: finops/nanjing-finops.yml
   - type: Review
     url: review.yml
-  - type: ProductPage
-    url: https://lib.nju.edu.cn/
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    Nanjing University operates a real, verified estate of institution-run machine-readable
+    surfaces, all of it probed live on 2026-09-01 and all of it on hosts inside CERNET address
+    space under nju.edu.cn: its own Shibboleth IdP (registered in CARSI and eduGAIN since
+    2020-02-18), CAS ticket validation answering the CAS 2.0/3.0 protocol anonymously, the NJU
+    Mirror JSON configuration endpoints, a GitLab REST API v4 the university's own site consumes,
+    a BookStack service publishing 79 documented REST endpoints and gating them on an NJU token,
+    and Seafile / SeaTable / Vaultwarden deployments answering unauthenticated service-discovery
+    JSON. What NJU does not have is equally definite and is stated rather than padded: no
+    developer portal, no API gateway, no API key or client registration, no published API terms,
+    no OpenAPI, no robots.txt, no sitemap.xml, no llms.txt and no .well-known/security.txt on the
+    main site (all 404), no OIDC discovery on the CAS server, no OAI-PMH endpoint, no DataCite or
+    Crossref membership, and no institutional repository host that resolves. Three surfaces are
+    gated rather than absent and are recorded as findings: the library OPAC is restricted to the
+    campus network (403, "use the NJU VPN"), git.nju.edu.cn answers non-browser clients with an
+    Anubis bot challenge, and data.nju.edu.cn and elearning.nju.edu.cn return HTTP 483 maintenance
+    pages from an edge WAF. One vendor tenancy the library still links — the Summon discovery
+    instance at nju.summon.serialssolutions.com — returns 404 on every path and was therefore not
+    recorded as a live surface. No vendor contract is saved under NJU's name: the Seafile,
+    SeaTable, Vaultwarden, GitLab and BookStack contracts belong to those products, and only the
+    deployments are credited here. On AI, NJU's public posture is curricular rather than
+    regulatory — it launched mandatory AI general-education core courses for the class of 2028 in
+    September 2024 and runs its own assistant platform at chat.nju.edu.cn — but no
+    institution-wide generative-AI usage policy was found on a public NJU surface in either
+    English or Chinese, so no AIPolicy pointer is claimed.
+  evidence:
+    - url: https://idp.nju.edu.cn/idp/shibboleth
+      status: 200
+      note: SAML 2.0 EntityDescriptor, application/xml — but unedited Shibboleth sample metadata, validUntil 2020-02-17
+    - url: https://technical.edugain.org/api.php?action=list_entities&fed_id=CARSI&format=json
+      status: 200
+      note: NJU registered in CARSI/eduGAIN, entityID https://idp.nju.edu.cn/idp/shibboleth, scope nju.edu.cn
+    - url: https://authserver.nju.edu.cn/authserver/p3/serviceValidate?service=https%3A%2F%2Fexample.org%2F&ticket=ST-test
+      status: 200
+      note: CAS 3.0 protocol XML to an anonymous caller
+    - url: https://mirrors.nju.edu.cn/configs/documentations/index.json
+      status: 200
+      note: 18.5KB application/json, unauthenticated
+    - url: https://doc.nju.edu.cn/api/docs
+      status: 200
+      note: public 79-endpoint REST API reference
+    - url: https://doc.nju.edu.cn/api/books
+      status: 401
+      note: token-gated with a clean JSON error envelope — gated, not dead
+    - url: https://box.nju.edu.cn/api2/server-info/
+      status: 200
+      note: Seafile 13.0.25, "南大云盘 NJU Box"
+    - url: https://table.nju.edu.cn/server-info/
+      status: 200
+      note: SeaTable 6.1.9 enterprise edition
+    - url: https://pass.nju.edu.cn/api/config
+      status: 200
+      note: Vaultwarden 2026.6.0
+    - url: https://git.nju.edu.cn/api/v4/projects/2412/issues
+      status: 200
+      note: body is an Anubis bot challenge — live and gated, not the resource
+    - url: https://api.ror.org/organizations/01rxvg760
+      status: 200
+      note: ROR registration, domain nju.edu.cn
+    - url: https://api.crossref.org/funders/501100008048
+      status: 200
+      note: Crossref Open Funder Registry entry, 3,401 works
+    - url: https://api.datacite.org/clients?query=Nanjing%20University
+      status: 200
+      note: meta.total 0 — no DataCite membership
+    - url: https://opac.nju.edu.cn/oai?verb=Identify
+      status: 403
+      note: '"请使用南大VPN访问!" — campus-network gated, not absent'
+    - url: https://lib.nju.edu.cn/oai?verb=Identify
+      status: 404
+      note: no OAI-PMH endpoint on the library host
+    - url: https://data.nju.edu.cn/
+      status: 483
+      note: edge WAF maintenance page ("网络维护") — no open data portal readable from outside China
+    - url: https://elearning.nju.edu.cn/
+      status: 483
+      note: same WAF maintenance page — no LTI/Caliper surface readable
+    - url: https://api.nju.edu.cn/
+      status: 200
+      note: an "api." host exists and serves the stock Apache Tomcat 8.5.98 welcome page — not an API
+    - url: https://nju.summon.serialssolutions.com/search
+      status: 404
+      note: vendor Summon tenancy still linked by the library but dead — not recorded as a surface
+    - url: https://www.nju.edu.cn/llms.txt
+      status: 404
+      note: no llms.txt; robots.txt, sitemap.xml and .well-known/security.txt also 404
+    - url: https://chat.nju.edu.cn/api/config
+      status: 200
+      note: soft-200 — every API path returns the same 2,706-byte SPA shell
+    - url: https://www.nju.edu.cn/en/info/1057/12011.htm
+      status: 200
+      note: AI general-education core courses — curricular AI posture, not a usage policy
+  probed: '2026-09-01'
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
