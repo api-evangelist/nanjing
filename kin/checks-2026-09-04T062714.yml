@@ -1,20 +1,18 @@
 ---
 kin_checks:
   slug: nanjing
-  schema_version: 0.17.2
-  scored_at: '2026-09-01'
-  run_ts: 2026-09-01T063623
+  schema_version: 0.18.2
+  scored_at: '2026-09-04'
+  run_ts: 2026-09-04T062714
   note: Actionable checks only (missed + partial). earned/na are every other check
-    in rubric/scoring-0.17.2.yml; counts below let you verify that.
+    in rubric/scoring-0.18.2.yml; counts below let you verify that.
   counts:
-    total: 130
-    earned: 19
+    total: 132
+    earned: 25
     partial: 2
-    missed: 68
-    na: 41
+    missed: 63
+    na: 42
   checks:
-  - id: multiple_apis
-    status: missed
   - id: well_known_published
     status: missed
   - id: llms_txt_published
@@ -69,8 +67,6 @@ kin_checks:
     status: missed
   - id: portal_present
     status: missed
-  - id: api_reference_present
-    status: missed
   - id: getting_started_present
     status: missed
   - id: sdk_count_1
@@ -85,15 +81,9 @@ kin_checks:
     status: missed
   - id: agent_skill_present
     status: missed
-  - id: support_channel
-    status: missed
   - id: blog_present
     status: missed
   - id: plans_multiple
-    status: missed
-  - id: pricing_link
-    status: missed
-  - id: sign_up_present
     status: missed
   - id: terms_of_service
     status: missed
