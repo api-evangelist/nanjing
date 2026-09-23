@@ -1,0 +1,158 @@
+specification: API Evangelist Domain Standard Conformance
+specificationVersion: '0.1'
+provider: Nanjing University
+providerId: nanjing
+regime: education
+generated: '2026-09-01'
+method: probed
+source: >-
+  Live probes of Nanjing University hosts on 2026-09-01, run as part of the API Evangelist
+  university pipeline; the SAML 2.0 EntityDescriptor served at
+  https://idp.nju.edu.cn/idp/shibboleth (200, application/xml), archived at
+  identity-federation/nanjing-idp-saml-metadata.xml; the eduGAIN technical database entity
+  list for CARSI (200, 725 entities); the DataCite REST API (api.datacite.org/clients and
+  /providers, both 200 with zero matches); and the Crossref REST API (api.crossref.org/members
+  and /funders, both 200). Every hit below points at the exact URL that returned the
+  evidence; no conformance is recorded from a prose claim.
+description: >-
+  Conformance of Nanjing University's own machine-readable surfaces against the Kin Score
+  `education` regime standards list (scim, lti, oneroster, ed-fi, caliper, qti, oai-pmh,
+  shibboleth, saml, orcid, datacite, crossref). Reward-only: absence below means "not found
+  on a public surface on 2026-09-01", not "not in use internally". Two standards are met, both
+  by the same institution-operated Shibboleth deployment; the rest were probed and not found.
+
+  A note on searching in the local language: NJU's public surface is predominantly Chinese and
+  the English mirror at www.nju.edu.cn/en/ is a small subset of it. Every not-found below was
+  checked against Chinese-language hosts and pages as well as English ones.
+standards:
+  - id: shibboleth
+    status: conformant
+    operator: institution
+    evidence:
+      url: https://idp.nju.edu.cn/idp/shibboleth
+      status: 200
+      content_type: application/xml
+      detail: >-
+        Nanjing University runs its own Shibboleth Identity Provider and serves SAML 2.0
+        metadata at the canonical /idp/shibboleth location: an <EntityDescriptor> with
+        entityID="https://idp.nju.edu.cn/idp/shibboleth", an IDPSSODescriptor advertising
+        SAML 2.0, SAML 1.1 and the Shibboleth 1.0 profile, an AttributeAuthorityDescriptor,
+        and shibmd:Scope "nju.edu.cn". The host resolves to 219.219.122.95, APNIC netname
+        CERNET-CN (China Education and Research Network, Nanjing Regional Network), with no
+        CNAME to any managed-IdP or CDN platform. Archived verbatim at
+        identity-federation/nanjing-idp-saml-metadata.xml.
+    caveat: >-
+      The served document is Shibboleth's unedited sample metadata — validUntil
+      2020-02-17T13:04:11.019Z (expired), placeholder mdui:UIInfo, and the vendor's own
+      "This is example metadata only" header comment still in place. The deployment and its
+      endpoints are real and in production; the self-published metadata has never been
+      curated. Conformance is recorded on the deployment, and the staleness is recorded here
+      rather than smoothed over.
+    additional_evidence:
+      - url: https://idp.nju.edu.cn/idp/profile/SAML2/Redirect/SSO
+        status: 400
+        note: >-
+          Correct protocol response to a GET carrying no SAMLRequest — the SSO endpoint is
+          live, not dead.
+      - url: https://lib.nju.edu.cn/
+        status: 200
+        note: >-
+          NJU Library links https://idp.nju.edu.cn/idp/shibboleth as the CARSI off-campus
+          access route, corroborating production use from an institution-operated page.
+  - id: saml
+    status: conformant
+    operator: institution
+    evidence:
+      url: https://technical.edugain.org/api.php?action=list_entities&fed_id=CARSI&format=json
+      status: 200
+      content_type: application/json
+      detail: >-
+        Nanjing University is a registered entity of CARSI (CERNET Authentication and
+        Resource Sharing Infrastructure), China's national R&E identity federation and an
+        eduGAIN participant since 2019-06-18. The eduGAIN technical database returns entity
+        id 671521, entityID https://idp.nju.edu.cn/idp/shibboleth, registration authority
+        https://www.carsi.edu.cn, display names "Nanjing University" (en) and
+        "南京大学(Nanjing University)" (zh), scope nju.edu.cn, roles IDPSSODescriptor and
+        AttributeAuthorityDescriptor, first seen 2020-02-18. Federation membership is an
+        institution-operated fact by definition — no vendor sits between NJU and this entry.
+    caveat: >-
+      No REFEDS entity categories are asserted on the entry: sirtfi is not declared and no
+      Code of Conduct / R&S category is present. The registration is minimal, but it is real
+      and it is NJU's.
+not_found:
+  - id: oai-pmh
+    detail: >-
+      No OAI-PMH endpoint was found on a Nanjing University host. lib.nju.edu.cn/oai?verb=Identify
+      returns 404 (the library CMS 404 page, not an OAI error document); opac.nju.edu.cn/oai?verb=Identify
+      returns 403 "请使用南大VPN访问!" (use the NJU VPN), i.e. the catalog host is network-gated
+      to campus rather than absent. Candidate institutional-repository hosts ir.nju.edu.cn,
+      repository.nju.edu.cn, dspace.nju.edu.cn, eprints.nju.edu.cn and ir.lib.nju.edu.cn do not
+      resolve. NJU appears to operate no publicly harvestable institutional repository.
+  - id: datacite
+    detail: >-
+      Nanjing University is not a DataCite member or repository client. api.datacite.org/clients?query=Nanjing%20University
+      returns 200 with meta.total 0, and api.datacite.org/providers?query=Nanjing returns 200 with
+      meta.total 0. No institution-operated DOI minting surface exists to record.
+  - id: crossref
+    detail: >-
+      Nanjing University is not a Crossref member: api.crossref.org/members?query=Nanjing+University
+      returns 200 with a single match, and that match is Nanjing University of Aeronautics and
+      Astronautics (member 22935), a different institution — precisely the kind of near-name
+      misattribution this pipeline exists to prevent, and it is not recorded here. NJU does hold a
+      Crossref Open Funder Registry identifier (501100008048, api.crossref.org/funders/501100008048,
+      200, work-count 3,401, with descendant funder IDs 501100009999 and 501100011400). That is a
+      registry membership — a fact about NJU as a funder of record — and it is recorded in apis.yml
+      as an x-operator "registry" entry. It is NOT Crossref API conformance and is not counted here.
+  - id: orcid
+    detail: >-
+      No ORCID member API surface, ORCID institutional integration endpoint or ORCID-affiliated
+      profile service was found on any Nanjing University host.
+  - id: scim
+    detail: >-
+      No public SCIM 2.0 endpoint or SCIM documentation on an NJU host. Identity provisioning is
+      handled by the CAS deployment at authserver.nju.edu.cn and the Shibboleth IdP; neither
+      exposes a SCIM interface publicly.
+  - id: lti
+    detail: >-
+      No institution-operated LTI platform or tool surface found. The learning surfaces that could
+      carry it (elearning.nju.edu.cn) answer HTTP 483 from an edge WAF with a "网络维护" maintenance
+      body and could not be read from outside China.
+  - id: oneroster
+    detail: No 1EdTech OneRoster endpoint found on a Nanjing University host.
+  - id: ed-fi
+    detail: >-
+      Ed-Fi is a US K-12 / state-agency data standard with no adoption path in the Chinese higher
+      education system. Not found and not expected.
+  - id: caliper
+    detail: No IMS Caliper Analytics endpoint or event store found on a Nanjing University host.
+  - id: qti
+    detail: No QTI assessment interchange surface found on a Nanjing University host.
+other_machine_readable_protocols:
+  note: >-
+    Recorded for completeness. These are real, probed, institution-operated protocol surfaces that
+    are NOT in the education regime's standards[] list, so they earn nothing under
+    domain_standard_conformance. They are the evidence that this institution is not, in fact,
+    surface-free.
+  protocols:
+    - protocol: CAS 2.0 / 3.0 (Central Authentication Service)
+      url: https://authserver.nju.edu.cn/authserver/p3/serviceValidate
+      status: 200
+      content_type: application/xml
+      detail: >-
+        Ticket validation answers the CAS protocol directly to an anonymous caller:
+        <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'> with
+        <cas:authenticationFailure code="INVALID_TICKET">. Both /authserver/serviceValidate (CAS 2.0)
+        and /authserver/p3/serviceValidate (CAS 3.0) respond. The June 2026 profile recorded only the
+        HTML login page.
+    - protocol: GitLab REST API v4
+      url: https://git.nju.edu.cn/api/v4/projects/2412/issues
+      status: 200
+      detail: >-
+        NJU e-Science runs a GitLab instance whose public REST API v4 is used in production by the
+        university's own mirror site to render announcements. The endpoint currently answers non-browser
+        clients with an Anubis proof-of-work bot challenge (HTTP 200, "Making sure you're not a bot!"),
+        which grades live-but-gated, not dead.
+    - protocol: NTP
+      url: https://time.nju.edu.cn/
+      status: 200
+      detail: NJU Time — the university's public network time service, machine-consumable but not HTTP.

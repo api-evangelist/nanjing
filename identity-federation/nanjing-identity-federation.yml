@@ -1,0 +1,128 @@
+specification: API Evangelist Identity Federation
+specificationVersion: '0.1'
+provider: Nanjing University
+providerId: nanjing
+generated: '2026-09-01'
+method: probed
+source: >-
+  Live fetch of https://idp.nju.edu.cn/idp/shibboleth (SAML 2.0 EntityDescriptor, HTTP 200,
+  application/xml, 14,402 bytes), archived verbatim at
+  identity-federation/nanjing-idp-saml-metadata.xml; the eduGAIN technical database
+  (https://technical.edugain.org/api.php?action=list_entities&fed_id=CARSI&format=json,
+  HTTP 200, 725 entities) parsed for every entity scoped to nju.edu.cn; and DNS + APNIC
+  whois resolution of every host involved, to settle who operates the thing each contract
+  describes.
+description: >-
+  Nanjing University's SAML 2.0 identity federation surface. This is the strongest
+  institution-operated, machine-readable contract in the profile, and it was completely
+  absent from the June 2026 pass, which recorded only the CAS login page at
+  authserver.nju.edu.cn.
+
+  NJU runs its own Shibboleth Identity Provider at idp.nju.edu.cn, publishes SAML 2.0
+  metadata at the canonical /idp/shibboleth location, and is registered in CARSI (CERNET
+  Authentication and Resource Sharing Infrastructure) — China's national research and
+  education federation — which has been an eduGAIN participant since 2019-06-18. The
+  registration carries NJU's own display names in English and Chinese and asserts the
+  shibmd scope nju.edu.cn. The host resolves to 219.219.122.95 inside CERNET's
+  219.218.0.0 - 219.219.255.255 allocation (APNIC netname CERNET-CN, "Nanjing Regional
+  Network"), with no CNAME to any commercial CDN or managed-IdP platform, so unlike the
+  AAF Rapid IdP pattern seen in the Australian cohort this IdP is genuinely
+  institution-operated infrastructure, not a vendor tenancy wearing an institution
+  hostname.
+
+  One honest qualification, recorded rather than smoothed over: the document NJU serves at
+  its own /idp/shibboleth endpoint is Shibboleth IdP's UNEDITED SAMPLE metadata. It opens
+  with the vendor's own warning ("This is example metadata only. Do *NOT* supply it as is
+  without review"), its validUntil is 2020-02-17T13:04:11Z — over six years expired — and
+  its mdui:UIInfo block is still the commented-out placeholder "A Name for the IdP at
+  idp.nju.edu.cn". The deployment is real and the endpoints in it are real; the
+  self-published copy of its metadata has never been curated. The authoritative,
+  human-meaningful description of this entity lives in CARSI's registration, not on NJU's
+  own host.
+federation:
+  name: CERNET Authentication and Resource Sharing Infrastructure
+  abbreviation: CARSI
+  registration_authority: https://www.carsi.edu.cn
+  registrar_contact: carsi@pku.edu.cn
+  interfederation: eduGAIN
+  edugain_membership_date: '2019-05-24'
+  edugain_production_date: '2019-06-18'
+  entity_directory: https://technical.edugain.org/entities
+  probed: '2026-09-01'
+  status: 200
+identity_provider:
+  entityID: https://idp.nju.edu.cn/idp/shibboleth
+  x-operator: institution
+  operator_basis: >-
+    idp.nju.edu.cn is under Nanjing University's own registrable domain and resolves
+    directly (no CNAME) to 219.219.122.95. APNIC whois places that address in CERNET-CN
+    219.218.0.0 - 219.219.255.255, "China Education and Research Network / Nanjing Regional
+    Network". There is no managed-IdP CNAME pattern, no commercial CDN and no vendor
+    platform between NJU and this metadata. The IdP's own endpoints all live on
+    idp.nju.edu.cn (SSO on 443, SOAP attribute query and artifact resolution on 8443).
+  metadata_url: https://idp.nju.edu.cn/idp/shibboleth
+  metadata_status: 200
+  metadata_content_type: application/xml
+  metadata_archived: identity-federation/nanjing-idp-saml-metadata.xml
+  metadata_caveat: >-
+    Unedited Shibboleth sample metadata. validUntil 2020-02-17T13:04:11.019Z (expired);
+    mdui:UIInfo still the shipped placeholder; the file's own header comment says it is
+    example metadata that should not be supplied as is.
+  scope: nju.edu.cn
+  protocols:
+    - urn:oasis:names:tc:SAML:2.0:protocol
+    - urn:oasis:names:tc:SAML:1.1:protocol
+    - urn:mace:shibboleth:1.0
+  roles:
+    - IDPSSODescriptor
+    - AttributeAuthorityDescriptor
+  endpoints:
+    - binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+      service: SingleSignOnService
+      location: https://idp.nju.edu.cn/idp/profile/SAML2/Redirect/SSO
+      probed_status: 400
+      note: >-
+        400 is the correct answer to a bare GET with no SAMLRequest — a live SAML endpoint,
+        not a dead one.
+    - binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+      service: SingleSignOnService
+      location: https://idp.nju.edu.cn/idp/profile/SAML2/POST/SSO
+    - binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+      service: SingleLogoutService
+      location: https://idp.nju.edu.cn/idp/profile/SAML2/Redirect/SLO
+    - binding: urn:oasis:names:tc:SAML:2.0:bindings:SOAP
+      service: AttributeService
+      location: https://idp.nju.edu.cn:8443/idp/profile/SAML2/SOAP/AttributeQuery
+    - binding: urn:oasis:names:tc:SAML:2.0:bindings:SOAP
+      service: ArtifactResolutionService
+      location: https://idp.nju.edu.cn:8443/idp/profile/SAML2/SOAP/ArtifactResolution
+federation_registration:
+  x-operator: federation
+  operator_basis: >-
+    A federation is shared by definition and the IdP behind it is the institution's. This
+    record is Nanjing University's own entry in CARSI, republished into eduGAIN; it is a
+    fact about NJU, not a vendor contract, and is recorded rather than filtered as a
+    shared host.
+  entityID: https://idp.nju.edu.cn/idp/shibboleth
+  registration_authority: https://www.carsi.edu.cn
+  federation_code: CARSI
+  display_name_en: Nanjing University
+  display_name_zh: 南京大学(Nanjing University)
+  scopes: nju.edu.cn
+  roles:
+    - IDPSSODescriptor
+    - AttributeAuthorityDescriptor
+  first_seen: '2020-02-18'
+  entity_categories: none declared
+  sirtfi: not asserted
+  refeds_coco: not asserted
+  source_url: https://technical.edugain.org/api.php?action=list_entities&fed_id=CARSI&format=json
+  source_status: 200
+service_provider_usage:
+  detail: >-
+    Nanjing University Library publishes CARSI/Shibboleth as the off-campus route to
+    licensed resources, and links https://idp.nju.edu.cn/idp/shibboleth directly from
+    https://lib.nju.edu.cn/ (200, probed 2026-09-01), alongside vendor federation entry
+    points such as https://signon.thomsonreuters.com/federation/CARSI. This is the
+    institution using its own IdP in production, corroborated on an institution-operated
+    page.

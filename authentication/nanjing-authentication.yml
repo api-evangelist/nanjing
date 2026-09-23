@@ -1,0 +1,153 @@
+generated: '2026-09-01'
+method: probed
+source: >-
+  Live probes on 2026-09-01 of every surface attributed to Nanjing University in this profile.
+  Each scheme below names the exact URL that demonstrated it. Nothing here is inferred from a
+  vendor's generic documentation: where the software is a third party's, the scheme recorded is
+  the one NJU's own deployment actually answered with.
+provider: Nanjing University
+providerId: nanjing
+summary:
+  types:
+    - none
+    - saml
+    - cas
+    - bearer
+    - challenge
+  institution_operated_public_surfaces_requiring_no_auth: 4
+  note: >-
+    Nanjing University operates no API key programme, no OAuth client registration, no developer
+    portal and no published API terms of service. Every authenticated surface below is gated on an
+    NJU institutional account, and the credentials are issued through central IT (ITSC), not
+    self-service. There is nothing here a member of the public can sign up for.
+schemes:
+  - name: MirrorConfigPublic
+    type: none
+    operator: institution
+    applies_to: https://mirrors.nju.edu.cn/configs
+    description: >-
+      NJU Mirror's JSON configuration endpoints are open, unauthenticated reads and answer
+      application/json. One quirk worth recording: the site's edge sets a `bcheck=true` cookie and
+      302s a first-time client back to itself; sending that cookie makes every route answer
+      normally. It is a cookie check, not an authentication scheme.
+    evidence:
+      url: https://mirrors.nju.edu.cn/configs/documentations/index.json
+      status: 200
+  - name: SeafileServerInfoPublic
+    type: none
+    operator: institution
+    applies_to: https://box.nju.edu.cn/api2
+    description: >-
+      NJU Box (南大云盘) answers /api2/ping/ and /api2/server-info/ to an anonymous caller. Everything
+      beyond service discovery requires an NJU account token.
+    evidence:
+      url: https://box.nju.edu.cn/api2/server-info/
+      status: 200
+  - name: SeaTableServerInfoPublic
+    type: none
+    operator: institution
+    applies_to: https://table.nju.edu.cn
+    description: >-
+      NJU Table (南大表格) answers /api2/ping/ and /server-info/ anonymously; the SeaTable API beyond
+      that requires an account token.
+    evidence:
+      url: https://table.nju.edu.cn/server-info/
+      status: 200
+  - name: VaultwardenStatusPublic
+    type: none
+    operator: institution
+    applies_to: https://pass.nju.edu.cn
+    description: >-
+      NJU's password manager exposes /alive and /api/config unauthenticated (server identity,
+      version, vault and API base URLs). The vault API itself is Bitwarden-protocol and requires
+      account credentials.
+    evidence:
+      url: https://pass.nju.edu.cn/api/config
+      status: 200
+  - name: CasSingleSignOn
+    type: cas
+    operator: institution
+    applies_to: https://authserver.nju.edu.cn/authserver/
+    description: >-
+      Nanjing University's central single sign-on is a CAS deployment. Ticket validation is
+      publicly reachable and speaks the protocol to an anonymous caller: /authserver/serviceValidate
+      (CAS 2.0) and /authserver/p3/serviceValidate (CAS 3.0) both return
+      application/xml <cas:serviceResponse> with <cas:authenticationFailure code="INVALID_TICKET">.
+      Login supports password, verification code, biometric and QR-code methods. There is no public
+      service registration: a relying service must be registered by NJU IT, so third parties cannot
+      obtain a CAS client.
+    evidence:
+      url: https://authserver.nju.edu.cn/authserver/p3/serviceValidate?service=https%3A%2F%2Fexample.org%2F&ticket=ST-test
+      status: 200
+    additional_evidence:
+      - url: https://authserver.nju.edu.cn/authserver/login
+        status: 200
+      - url: https://authserver.nju.edu.cn/authserver/.well-known/openid-configuration
+        status: 404
+        note: >-
+          Probed for an OIDC discovery document; the CAS server returns a JSON 404
+          ({"error":"Not Found"}). No OpenID Connect surface is published.
+  - name: ShibbolethSaml
+    type: saml
+    operator: institution
+    applies_to: https://idp.nju.edu.cn/idp/shibboleth
+    description: >-
+      SAML 2.0 web SSO through NJU's own Shibboleth IdP, registered in CARSI and republished to
+      eduGAIN. Used in production by the university library for off-campus access to licensed
+      resources. Metadata is public; assertions require an NJU account.
+    evidence:
+      url: https://idp.nju.edu.cn/idp/shibboleth
+      status: 200
+    additional_evidence:
+      - url: https://idp.nju.edu.cn/idp/profile/SAML2/Redirect/SSO
+        status: 400
+        note: correct protocol rejection of a request carrying no SAMLRequest
+  - name: BookStackApiToken
+    type: bearer
+    operator: institution
+    applies_to: https://doc.nju.edu.cn/api
+    description: >-
+      The e-Science Document service publishes complete REST API documentation publicly at
+      /api/docs — 79 endpoints across books, chapters, pages, shelves, attachments, images, users,
+      roles, recycle-bin, audit-log and search, with GET/POST/PUT/DELETE. The API itself is
+      token-gated: an unauthenticated call returns a clean JSON error envelope,
+      {"error":{"message":"No authorization token found on the request","code":401}}. Tokens are
+      issued to NJU account holders from the user profile; there is no public registration. The
+      machine-readable description at /api/docs.json is itself behind the token, so the only
+      public description of this API is the HTML page.
+    evidence:
+      url: https://doc.nju.edu.cn/api/books
+      status: 401
+    additional_evidence:
+      - url: https://doc.nju.edu.cn/api/docs
+        status: 200
+        note: public HTML API reference
+      - url: https://doc.nju.edu.cn/api/docs.json
+        status: 401
+        note: the JSON description of the API requires the token the API requires
+  - name: AnubisBotChallenge
+    type: challenge
+    operator: institution
+    applies_to: https://git.nju.edu.cn/api/v4
+    description: >-
+      NJU's GitLab instance sits behind an Anubis proof-of-work bot challenge. Every /api/v4 route
+      answers HTTP 200 with the challenge page ("Making sure you're not a bot!") to a non-browser
+      client, so the API is live and gated rather than dead or absent — the university's own mirror
+      site calls https://git.nju.edu.cn/api/v4/projects/2412/issues from a browser to render its
+      announcements. This is an anti-crawler control, not an authorization scheme; it is recorded
+      here because it is what a client encounters first.
+    evidence:
+      url: https://git.nju.edu.cn/api/v4/projects/2412/issues
+      status: 200
+      note: 200 body is the Anubis challenge, not the resource
+  - name: CampusNetworkGate
+    type: challenge
+    operator: institution
+    applies_to: https://opac.nju.edu.cn
+    description: >-
+      The library OPAC is restricted to the campus network: every route, including
+      /oai?verb=Identify, returns HTTP 403 with the body "请使用南大VPN访问!" ("please access via the
+      NJU VPN"). Live and gated by network location, not credentials.
+    evidence:
+      url: https://opac.nju.edu.cn/
+      status: 403

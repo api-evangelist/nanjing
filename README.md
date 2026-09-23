@@ -64,7 +64,9 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Nanjing University (NJU), founded in 1902 in Nanjing, Jiangsu, China, is one of China's oldest and most prestigious research universities, ranked #145 in the QS World University Rankings 2025. This repository catalogs NJU's publicly observable developer/API footprint as an APIs.json provider profile. No public, documented developer API program or open-data portal was confirmed; the entries below reflect institution-facing systems only.
+Nanjing University (NJU, 南京大学), founded in 1902 in Nanjing, Jiangsu, is one of China's oldest research universities and a member of the C9 League. This repository is an APIs.json provider profile of NJU's publicly observable, machine-readable footprint.
+
+NJU publishes **no developer portal, no API gateway, no API programme and no OpenAPI**. What it does operate — directly, on its own `nju.edu.cn` hosts inside CERNET address space, almost all of it run by the university's e-Science Center — is a genuine estate of institution-run machine-readable surfaces. Every entry below was probed live on 2026-09-01; see [review.yml](review.yml) for the full status table.
 
 - APIs.json: https://raw.githubusercontent.com/api-evangelist/nanjing/refs/heads/main/apis.yml
 - Run with Naftiko: https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=nanjing-api-evangelist&utm_content=repo
@@ -74,15 +76,45 @@ Nanjing University (NJU), founded in 1902 in Nanjing, Jiangsu, China, is one of 
 - Index
 - Consumer
 - 3rd-Party
+- University · Public Research University
 
 ## Tags
 
-Education, Higher Education, University, Research, China, Authentication
+University, Higher Education, Education, China, C9 League, Research, Identity Federation, Authentication, Single Sign-On, Research Computing, Open Source Mirror, Version Control, Library
 
-## APIs
+## Surfaces
 
-- **Nanjing University Unified Identity Authentication (CAS SSO)** — CAS-based single sign-on platform. Docs: https://itsc.nju.edu.cn/itsc_en/68/6a/c26812a485482/page.htm
-- **Nanjing University Library Discovery & OPAC** — OPAC and Summon discovery web systems (no documented public API). Docs: https://lib.nju.edu.cn/
+Every surface carries an operator: **institution** (NJU runs it), **federation** (a shared identity federation carrying NJU's own entity), or **registry** (an identifier registry NJU is registered in). No vendor's contract is saved under NJU's name.
+
+| Surface | Operator | Status |
+|---|---|---|
+| **Shibboleth Identity Provider** — SAML 2.0 metadata at `idp.nju.edu.cn/idp/shibboleth` | institution | 200 `application/xml` |
+| **CARSI / eduGAIN registration** — entity 671521, scope `nju.edu.cn`, first seen 2020-02-18 | federation | 200 |
+| **CAS Single Sign-On** — `authserver.nju.edu.cn`, CAS 2.0/3.0 ticket validation in XML | institution | 200 |
+| **NJU Mirror** — `mirrors.nju.edu.cn/configs/*.json`, unauthenticated JSON | institution | 200 |
+| **e-Science GitLab** — `git.nju.edu.cn/api/v4`, REST API v4 | institution | live behind an Anubis bot challenge |
+| **e-Science Document API** — `doc.nju.edu.cn/api`, 79 documented endpoints | institution | docs 200, API 401 (NJU token) |
+| **NJU Box** — Seafile 13.0.25, `box.nju.edu.cn/api2` | institution | 200 |
+| **NJU Table** — SeaTable 6.1.9, `table.nju.edu.cn` | institution | 200 |
+| **Password manager** — Vaultwarden 2026.6.0, `pass.nju.edu.cn` | institution | 200 |
+| **HPC / supercomputing** — `hpc.nju.edu.cn` | institution | 200, no public API |
+| **小蓝鲸 AI assistant** — `chat.nju.edu.cn` | institution | 200, SPA shell only |
+| **Library OPAC** — `opac.nju.edu.cn` | institution | 403, campus-network gated |
+| **ROR** — `01rxvg760` | registry | 200 |
+| **Crossref Open Funder Registry** — `501100008048` | registry | 200 |
+
+## Identity Federation
+
+- [identity-federation/nanjing-identity-federation.yml](identity-federation/nanjing-identity-federation.yml)
+- [identity-federation/nanjing-idp-saml-metadata.xml](identity-federation/nanjing-idp-saml-metadata.xml) — archived verbatim from NJU's own host
+
+## Conformance
+
+- [conformance/nanjing-education-standards-conformance.yml](conformance/nanjing-education-standards-conformance.yml) — `shibboleth` and `saml` conformant; `oai-pmh`, `orcid`, `datacite`, `crossref`, `scim`, `lti`, `oneroster`, `ed-fi`, `caliper`, `qti` probed and not found
+
+## Authentication
+
+- [authentication/nanjing-authentication.yml](authentication/nanjing-authentication.yml)
 
 ## Plans
 
@@ -99,18 +131,31 @@ Education, Higher Education, University, Research, China, Authentication
 ## Timestamps
 
 - Created: 2026-06-03
-- Modified: 2026-06-03
+- Modified: 2026-09-01
 
 ## Common Properties
 
 - Website: https://www.nju.edu.cn/en/
-- GitHub: https://github.com/MCG-NJU (Multimedia Computing Group research org; not an official university API org)
+- Documentation: https://doc.nju.edu.cn/
+- API Reference: https://doc.nju.edu.cn/api/docs
+- GitHub: https://github.com/MCG-NJU and https://github.com/nju-websoft (NJU research-group orgs; there is no central university API org)
 - LinkedIn: https://www.linkedin.com/school/nanjing-university/
+- Identity Federation: https://idp.nju.edu.cn/idp/shibboleth
+- Research Computing: https://hpc.nju.edu.cn/zh/
+- Library Catalog: https://lib.nju.edu.cn/
+- AI Tooling: https://chat.nju.edu.cn/
+- Support: https://itsc.nju.edu.cn/
 - Authentication: https://authserver.nju.edu.cn/authserver/login
 
 ## Notes
 
-This profile was assembled from public web research. Nanjing University does not publish a documented public developer API or open-data portal that could be verified. The authentication SSO and library discovery systems are institution-facing and are not advertised as developer APIs; no public endpoints, signup, or client registration were confirmed. No endpoints were fabricated. See [review.yml](review.yml) for verification details and HTTP status checks.
+This profile was assembled entirely from public probes; no credentials were used and no endpoints were fabricated.
+
+**What is deliberately absent.** No vendor contract is saved under Nanjing University's name. The GitLab, BookStack, Seafile, SeaTable and Vaultwarden APIs are those products' engineering — NJU operates the deployments, and only the deployments are recorded. The Summon discovery instance the library still links (`nju.summon.serialssolutions.com`) returns 404 on every path and is not recorded as a live surface. NJU is not a Crossref member and not a DataCite client; the only Crossref member matching a "Nanjing University" query is Nanjing University of Aeronautics and Astronautics, a different institution, and it is not attributed here.
+
+**Gated is not absent.** Three surfaces are live but closed to outside clients and are recorded as findings rather than gaps: the library OPAC returns 403 "请使用南大VPN访问!" on every route, `git.nju.edu.cn` answers non-browser clients with an Anubis proof-of-work challenge, and `data.nju.edu.cn` and `elearning.nju.edu.cn` return HTTP 483 WAF maintenance pages that could not be read from outside China. One host is a false lead worth naming: `api.nju.edu.cn` returns HTTP 200 and the body is the stock Apache Tomcat 8.5.98 welcome page.
+
+**Supersedes the June 2026 profile,** which recorded only a CAS login page and the library website and concluded that no public API surface existed. That held for "API programme" and did not hold for "machine-readable surface". See [review.yml](review.yml).
 
 ## Maintainers
 

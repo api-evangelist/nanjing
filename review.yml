@@ -3,8 +3,165 @@ name: Nanjing University
 description: Nanjing University public developer/API footprint review for APIs.json cataloging.
 url: https://raw.githubusercontent.com/api-evangelist/nanjing/refs/heads/main/review.yml
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
 reviews:
+  - date: '2026-09-01'
+    rating: 3
+    summary: >-
+      Re-profiled under the API Evangelist university pipeline, with operator attribution settled
+      before anything was saved. The June 2026 review's conclusion — "no public API endpoints,
+      developer documentation, signup, or client registration were found" — was too broad. It is
+      correct that Nanjing University runs no API programme: no developer portal, no gateway, no key
+      or client registration, no published API terms, no OpenAPI, and no robots.txt, sitemap.xml,
+      llms.txt or .well-known/security.txt on the main site (all 404). But NJU's e-Science Center
+      operates a real estate of institution-run, machine-readable surfaces that the first pass never
+      probed, every one of them on nju.edu.cn hosts inside CERNET address space with no vendor CNAME:
+      its own Shibboleth identity provider registered in CARSI and eduGAIN; CAS ticket validation
+      answering the CAS 2.0/3.0 protocol in XML to anonymous callers; the NJU Mirror JSON
+      configuration endpoints; a GitLab REST API v4 that the university's own mirror site consumes;
+      a BookStack documentation service publishing a 79-endpoint REST reference publicly and gating
+      the API on an NJU token; and Seafile, SeaTable and Vaultwarden deployments answering
+      unauthenticated service-discovery JSON.
+
+      No vendor contract was saved under NJU's name. The GitLab, BookStack, Seafile, SeaTable and
+      Vaultwarden APIs are those products' engineering; only NJU's deployments are recorded. The one
+      vendor tenancy the library still links, the Summon discovery instance at
+      nju.summon.serialssolutions.com, is dead (404 on every path) and was not recorded as a live
+      surface. Two identifier-registry memberships are recorded as facts about the institution: ROR
+      01rxvg760 and Crossref Open Funder Registry 501100008048. NJU is not a Crossref member and not
+      a DataCite client; the only Crossref member matching a "Nanjing University" query is Nanjing
+      University of Aeronautics and Astronautics, a different institution, and it was deliberately
+      not attributed here.
+
+      Three surfaces are gated rather than absent, which is a finding and not a gap: the library OPAC
+      returns 403 "请使用南大VPN访问!" on every route including an OAI-PMH probe; git.nju.edu.cn answers
+      non-browser clients with an Anubis proof-of-work bot challenge; and data.nju.edu.cn and
+      elearning.nju.edu.cn return HTTP 483 WAF maintenance pages that could not be read from outside
+      China. One host is a false lead worth naming: api.nju.edu.cn resolves and returns HTTP 200, and
+      the body is the stock Apache Tomcat 8.5.98 welcome page — an unconfigured container, not an API.
+    endpoints:
+      - url: https://idp.nju.edu.cn/idp/shibboleth
+        status: 200
+        note: >-
+          SAML 2.0 EntityDescriptor, application/xml, 14,402 bytes — NJU's own Shibboleth IdP.
+          Archived at identity-federation/nanjing-idp-saml-metadata.xml. Caveat recorded: it is
+          Shibboleth's unedited sample metadata, validUntil 2020-02-17, placeholder UIInfo.
+      - url: https://idp.nju.edu.cn/idp/profile/SAML2/Redirect/SSO
+        status: 400
+        note: correct protocol rejection of a request with no SAMLRequest — the endpoint is live
+      - url: https://technical.edugain.org/api.php?action=list_entities&fed_id=CARSI&format=json
+        status: 200
+        note: >-
+          725 CARSI entities; exactly one scoped to nju.edu.cn — entity 671521, "Nanjing University"
+          / "南京大学(Nanjing University)", first seen 2020-02-18
+      - url: https://authserver.nju.edu.cn/authserver/serviceValidate?service=https%3A%2F%2Fexample.org%2F&ticket=ST-test
+        status: 200
+        note: CAS 2.0 <cas:serviceResponse> INVALID_TICKET, application/xml
+      - url: https://authserver.nju.edu.cn/authserver/p3/serviceValidate?service=https%3A%2F%2Fexample.org%2F&ticket=ST-test
+        status: 200
+        note: CAS 3.0 ticket validation, same protocol response
+      - url: https://authserver.nju.edu.cn/authserver/.well-known/openid-configuration
+        status: 404
+        note: JSON 404 — no OpenID Connect discovery document published
+      - url: https://mirrors.nju.edu.cn/configs/documentations/index.json
+        status: 200
+        note: 18,573 bytes application/json — mirrored-distribution help index
+      - url: https://mirrors.nju.edu.cn/configs/news/index.json
+        status: 200
+        note: announcements as JSON
+      - url: https://mirrors.nju.edu.cn/configs/cards/esci.json
+        status: 200
+        note: >-
+          the e-Science service directory — how the rest of this estate was found (box, table, tex,
+          git, hpc, stor, entry, pass, time, doc)
+      - url: https://mirrors.nju.edu.cn/mirrorz.json
+        status: 404
+        note: no MirrorZ descriptor published
+      - url: https://git.nju.edu.cn/api/v4/projects/2412/issues
+        status: 200
+        note: >-
+          body is the Anubis bot challenge, not the resource; the same call from a browser is what
+          renders the mirror site's announcements — live and gated
+      - url: https://doc.nju.edu.cn/api/docs
+        status: 200
+        note: public REST API reference, 79 endpoints, GET/POST/PUT/DELETE
+      - url: https://doc.nju.edu.cn/api/books
+        status: 401
+        note: '{"error":{"message":"No authorization token found on the request","code":401}}'
+      - url: https://doc.nju.edu.cn/api/docs.json
+        status: 401
+        note: the machine-readable description of the API is itself behind the token
+      - url: https://box.nju.edu.cn/api2/server-info/
+        status: 200
+        note: Seafile 13.0.25, desktop-custom-brand "南大云盘 NJU Box"
+      - url: https://table.nju.edu.cn/server-info/
+        status: 200
+        note: '{"version":"6.1.9","edition":"enterprise edition"} — SeaTable, "南大表格 NJU Table"'
+      - url: https://pass.nju.edu.cn/api/config
+        status: 200
+        note: Vaultwarden 2026.6.0, vault https://pass.nju.edu.cn
+      - url: https://hpc.nju.edu.cn/zh/
+        status: 200
+        note: e-Science supercomputing centre — resources, charges, maintenance log, monitoring
+      - url: https://hpc.nju.edu.cn/zh/?format=feed&type=atom
+        status: 500
+        note: the site's own Joomla feed endpoint is broken — no pointer emitted
+      - url: https://chat.nju.edu.cn/
+        status: 200
+        note: >-
+          "南京大学-小蓝鲸智能助手平台" — institution-hosted AI assistant (astron-agent + Casdoor);
+          every candidate API path returns the same 2,706-byte SPA shell
+      - url: https://opac.nju.edu.cn/oai?verb=Identify
+        status: 403
+        note: '"请使用南大VPN访问!" — campus-network gated'
+      - url: https://lib.nju.edu.cn/oai?verb=Identify
+        status: 404
+        note: no OAI-PMH on the library host
+      - url: https://nju.summon.serialssolutions.com/search
+        status: 404
+        note: >-
+          vendor Summon tenancy still linked from lib.nju.edu.cn but dead on every path — recorded
+          here, not emitted as a pointer or an apis[] entry
+      - url: https://data.nju.edu.cn/
+        status: 483
+        note: edge WAF "网络维护" page — no readable open-data portal
+      - url: https://elearning.nju.edu.cn/
+        status: 483
+        note: same WAF page — no readable LTI/Caliper surface
+      - url: https://api.nju.edu.cn/
+        status: 200
+        note: stock Apache Tomcat 8.5.98 welcome page — an unconfigured host, not an API
+      - url: https://api.ror.org/organizations/01rxvg760
+        status: 200
+        note: ROR registration, domain nju.edu.cn, ISNI / GRID / Wikidata / Funder ID cross-refs
+      - url: https://api.crossref.org/funders/501100008048
+        status: 200
+        note: Crossref Open Funder Registry, "Nanjing University", 3,401 works
+      - url: https://api.crossref.org/members?query=Nanjing+University
+        status: 200
+        note: >-
+          only match is Nanjing University of Aeronautics and Astronautics (22935) — a different
+          institution, not attributed here
+      - url: https://api.datacite.org/clients?query=Nanjing%20University
+        status: 200
+        note: meta.total 0 — no DataCite membership
+      - url: https://www.nju.edu.cn/llms.txt
+        status: 404
+        note: no llms.txt; robots.txt, sitemap.xml and .well-known/security.txt also 404
+      - url: https://www.nju.edu.cn/en/info/1057/12011.htm
+        status: 200
+        note: >-
+          AI general-education core courses for the class of 2028 — NJU's public AI posture is
+          curricular; no institution-wide generative-AI usage policy was found in English or Chinese
+      - url: https://github.com/MCG-NJU
+        status: 200
+        note: Multimedia Computing Group research org — institution-affiliated, not a central API org
+      - url: https://github.com/nju-websoft
+        status: 200
+        note: Websoft Research Group, Nanjing University — 140 public repositories
+      - url: https://www.linkedin.com/school/nanjing-university/
+        status: 999
+        note: LinkedIn's standard bot challenge — live, not dead
   - date: '2026-06-03'
     rating: 1
     summary: >-
@@ -16,6 +173,9 @@ reviews:
       client registration were found; entries reflect institution-facing systems
       only. No endpoints were fabricated. The MCG-NJU GitHub org is a research
       group, not an official institutional developer org.
+
+      SUPERSEDED 2026-09-01: the conclusion held for "API programme" and did not hold for
+      "machine-readable surface". See the 2026-09-01 review.
     endpoints:
       - url: https://www.nju.edu.cn/en/
         status: 200
