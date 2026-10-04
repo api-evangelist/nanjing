@@ -294,6 +294,7 @@ apis:
       - type: Authentication
         url: https://pass.nju.edu.cn/
   - aid: nanjing:hpc
+    x-published: false
     name: NJU e-Science High Performance Computing Center
     description: >-
       Nanjing University's supercomputing service, operated by the e-Science Center under the
@@ -317,6 +318,7 @@ apis:
       - type: Pricing
         url: https://hpc.nju.edu.cn/zh/hpc/3119-charges
   - aid: nanjing:chat-assistant
+    x-published: false
     name: NJU Intelligent Assistant Platform (小蓝鲸)
     description: >-
       "小蓝鲸" — the university's own AI assistant platform for NJU users, a single-page
