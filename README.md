@@ -1,4 +1,4 @@
-# Nanjing University (nanjing)
+# Nanjing University
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,99 +64,125 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Nanjing University (NJU, 南京大学), founded in 1902 in Nanjing, Jiangsu, is one of China's oldest research universities and a member of the C9 League. This repository is an APIs.json provider profile of NJU's publicly observable, machine-readable footprint.
+Nanjing University (NJU, 南京大学), founded in 1902 in Nanjing, Jiangsu, is one of China's oldest research universities and a member of the C9 League. It publishes no developer portal, no API gateway, no API programme and no OpenAPI of its own, and this profile records that plainly. What it does operate — directly, on its own hosts, inside CERNET address space — is a genuine estate of institution-run machine-readable surfaces, almost all of it built and run by the university's e-Science Center: its own Shibboleth identity provider at idp.nju.edu.cn, registered in CARSI and republished to eduGAIN; a CAS single sign-on service whose ticket-validation endpoints answer the CAS 2.0 and 3.0 protocol to anonymous callers; a public open-source mirror at mirrors.nju.edu.cn serving JSON configuration endpoints; a GitLab instance at git.nju.edu.cn whose REST API v4 the mirror site itself consumes; a BookStack documentation service at doc.nju.edu.cn that publishes a complete 79-endpoint REST API reference publicly and gates the API on an NJU token; and Seafile, SeaTable and Vaultwarden deployments that answer unauthenticated service-discovery JSON. None of this is an API product, none of it is registerable by an outsider, and the contracts behind the service deployments are the upstream products', not NJU's engineering — so no vendor specification is saved here under NJU's name. The June 2026 profile of this institution saw none of it and recorded only a login page.
 
-NJU publishes **no developer portal, no API gateway, no API programme and no OpenAPI**. What it does operate — directly, on its own `nju.edu.cn` hosts inside CERNET address space, almost all of it run by the university's e-Science Center — is a genuine estate of institution-run machine-readable surfaces. Every entry below was probed live on 2026-09-01; see [review.yml](review.yml) for the full status table.
+**Areas:** University · Higher Education · Education · China · C9 League · Research · Identity Federation · Authentication · SSO · Research Computing · Open Source Mirror · Version Control
 
-- APIs.json: https://raw.githubusercontent.com/api-evangelist/nanjing/refs/heads/main/apis.yml
-- Run with Naftiko: https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=nanjing-api-evangelist&utm_content=repo
+## Nanjing University on APIs.io
 
-## Type
+Everything profiled for Nanjing University is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/nanjing/](https://apis.io/providers/nanjing/)** — or go straight to one of the APIs or properties below.
 
-- Index
-- Consumer
-- 3rd-Party
-- University · Public Research University
+### APIs (14)
 
-## Tags
+- [Nanjing University Shibboleth Identity Provider (SAML 2.0 metadata)](https://apis.io/apis/nanjing/idp-shibboleth/) — Nanjing University's own Shibboleth Identity Provider. It publishes SAML 2.0 metadata at the canonical /idp/shibboleth location — an EntityDescriptor with…
+- [Nanjing University CARSI / eduGAIN Federation Registration](https://apis.io/apis/nanjing/carsi-edugain/) — NJU's entry in CARSI (CERNET Authentication and Resource Sharing Infrastructure), China's national research and education identity federation, republished…
+- [Nanjing University Unified Identity Authentication (CAS SSO)](https://apis.io/apis/nanjing/cas-sso/) — NJU's central single sign-on, a CAS deployment supporting password, verification-code, biometric and QR-code login. It is not a developer API and there is…
+- [NJU Mirror (open-source software mirror)](https://apis.io/apis/nanjing/mirrors/) — The university's public open-source mirror, run by the NJU e-Science Center and open to anyone on the internet. Beyond the package trees themselves, the…
+- [NJU e-Science Code Hosting (GitLab REST API v4)](https://apis.io/apis/nanjing/gitlab/) — An institution-operated GitLab instance for NJU staff and students. Its REST API v4 is real and in production — the university's own mirror site fetches…
+- [NJU e-Science Document Service API](https://apis.io/apis/nanjing/doc-bookstack/) — The e-Science Center's documentation platform (a BookStack deployment) publishes a complete public REST API reference at /api/docs — 79 endpoints across…
+- [NJU Box (南大云盘) — Seafile deployment](https://apis.io/apis/nanjing/box/) — The university's cloud storage service for staff and students, a self-hosted Seafile 13.0.25 instance branded "南大云盘 NJU Box". Service discovery is anonymous…
+- [NJU Table (南大表格) — SeaTable deployment](https://apis.io/apis/nanjing/table/) — An institution-hosted SeaTable 6.1.9 enterprise-edition deployment offering collaborative tables to NJU users. /api2/ping/ and /server-info/ answer…
+- [NJU Password Manager (Vaultwarden deployment)](https://apis.io/apis/nanjing/pass/) — A self-hosted Vaultwarden 2026.6.0 instance offering a Bitwarden-protocol password vault to NJU users. /alive returns a server timestamp and /api/config…
+- [NJU e-Science High Performance Computing Center](https://apis.io/apis/nanjing/hpc/) — Nanjing University's supercomputing service, operated by the e-Science Center under the Collaborative Innovation Center of Advanced Microstructures. It…
+- [NJU Intelligent Assistant Platform (小蓝鲸)](https://apis.io/apis/nanjing/chat-assistant/) — "小蓝鲸" — the university's own AI assistant platform for NJU users, a single-page application backed by an astron-agent deployment with Casdoor as its…
+- [Nanjing University Library Catalog (OPAC)](https://apis.io/apis/nanjing/opac/) — The library's catalog host. It is live but restricted to the campus network: every route, including an OAI-PMH probe, returns HTTP 403 with the body…
+- [Nanjing University in the Research Organization Registry (ROR)](https://apis.io/apis/nanjing/ror/) — Nanjing University's registration in ROR, the open registry of research organizations: ROR ID 01rxvg760, domain nju.edu.cn, established 1902, with…
+- [Nanjing University in the Crossref Open Funder Registry](https://apis.io/apis/nanjing/crossref-funder/) — Nanjing University's entry in the Crossref Open Funder Registry as funder 501100008048, with 3,401 works recording it as a funder and two descendant funder…
 
-University, Higher Education, Education, China, C9 League, Research, Identity Federation, Authentication, Single Sign-On, Research Computing, Open Source Mirror, Version Control, Library
+### Published properties
 
-## Surfaces
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Every surface carries an operator: **institution** (NJU runs it), **federation** (a shared identity federation carrying NJU's own entity), or **registry** (an identifier registry NJU is registered in). No vendor's contract is saved under NJU's name.
+#### JSON-LD (1)
 
-| Surface | Operator | Status |
-|---|---|---|
-| **Shibboleth Identity Provider** — SAML 2.0 metadata at `idp.nju.edu.cn/idp/shibboleth` | institution | 200 `application/xml` |
-| **CARSI / eduGAIN registration** — entity 671521, scope `nju.edu.cn`, first seen 2020-02-18 | federation | 200 |
-| **CAS Single Sign-On** — `authserver.nju.edu.cn`, CAS 2.0/3.0 ticket validation in XML | institution | 200 |
-| **NJU Mirror** — `mirrors.nju.edu.cn/configs/*.json`, unauthenticated JSON | institution | 200 |
-| **e-Science GitLab** — `git.nju.edu.cn/api/v4`, REST API v4 | institution | live behind an Anubis bot challenge |
-| **e-Science Document API** — `doc.nju.edu.cn/api`, 79 documented endpoints | institution | docs 200, API 401 (NJU token) |
-| **NJU Box** — Seafile 13.0.25, `box.nju.edu.cn/api2` | institution | 200 |
-| **NJU Table** — SeaTable 6.1.9, `table.nju.edu.cn` | institution | 200 |
-| **Password manager** — Vaultwarden 2026.6.0, `pass.nju.edu.cn` | institution | 200 |
-| **HPC / supercomputing** — `hpc.nju.edu.cn` | institution | 200, no public API |
-| **小蓝鲸 AI assistant** — `chat.nju.edu.cn` | institution | 200, SPA shell only |
-| **Library OPAC** — `opac.nju.edu.cn` | institution | 403, campus-network gated |
-| **ROR** — `01rxvg760` | registry | 200 |
-| **Crossref Open Funder Registry** — `501100008048` | registry | 200 |
+Linked-data contexts for the provider's vocabulary.
 
-## Identity Federation
+- [Nanjing Context](https://apis.io/jsonld/nanjing/nanjing-context/)
 
-- [identity-federation/nanjing-identity-federation.yml](identity-federation/nanjing-identity-federation.yml)
-- [identity-federation/nanjing-idp-saml-metadata.xml](identity-federation/nanjing-idp-saml-metadata.xml) — archived verbatim from NJU's own host
+#### Security (2)
 
-## Conformance
+Authentication, trust centre, and vulnerability disclosure.
 
-- [conformance/nanjing-education-standards-conformance.yml](conformance/nanjing-education-standards-conformance.yml) — `shibboleth` and `saml` conformant; `oai-pmh`, `orcid`, `datacite`, `crossref`, `scim`, `lti`, `oneroster`, `ed-fi`, `caliper`, `qti` probed and not found
+- [Nanjing Authentication](https://apis.io/security/nanjing/nanjing-authentication/)
+- [Nanjing Domain Security](https://apis.io/security/nanjing/nanjing-domain-security/)
 
-## Authentication
+#### Plans and pricing (1)
 
-- [authentication/nanjing-authentication.yml](authentication/nanjing-authentication.yml)
+Published plans, tiers and prices.
 
-## Plans
+- [Nanjing Plans Pricing](https://apis.io/plans/nanjing/nanjing-plans-pricing/)
 
-- [plans/nanjing-plans-pricing.yml](plans/nanjing-plans-pricing.yml)
+#### Rate limits (1)
 
-## Rate Limits
+Published request limits.
 
-- [rate-limits/nanjing-rate-limits.yml](rate-limits/nanjing-rate-limits.yml)
+- [Nanjing Rate Limits](https://apis.io/rate-limits/nanjing/nanjing-rate-limits/)
 
-## FinOps
+#### FinOps (1)
 
-- [finops/nanjing-finops.yml](finops/nanjing-finops.yml)
+What the API costs to run, by operation.
 
-## Timestamps
+- [Nanjing Finops](https://apis.io/finops/nanjing/nanjing-finops/)
 
-- Created: 2026-06-03
-- Modified: 2026-09-01
+## Where to find this API
 
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- Website: https://www.nju.edu.cn/en/
-- Documentation: https://doc.nju.edu.cn/
-- API Reference: https://doc.nju.edu.cn/api/docs
-- GitHub: https://github.com/MCG-NJU and https://github.com/nju-websoft (NJU research-group orgs; there is no central university API org)
-- LinkedIn: https://www.linkedin.com/school/nanjing-university/
-- Identity Federation: https://idp.nju.edu.cn/idp/shibboleth
-- Research Computing: https://hpc.nju.edu.cn/zh/
-- Library Catalog: https://lib.nju.edu.cn/
-- AI Tooling: https://chat.nju.edu.cn/
-- Support: https://itsc.nju.edu.cn/
-- Authentication: https://authserver.nju.edu.cn/authserver/login
+- [Website](https://www.nju.edu.cn/en/)
+- [Documentation](https://doc.nju.edu.cn/)
+- [API reference](https://doc.nju.edu.cn/api/docs)
+- [Support](https://itsc.nju.edu.cn/)
+- [GitHub](https://github.com/MCG-NJU)
 
-## Notes
+## API Evangelist rating
 
-This profile was assembled entirely from public probes; no credentials were used and no endpoints were fabricated.
+**Kin Score 24.7** — emerging · rubric 0.24.0 · scored 2026-10-17
 
-**What is deliberately absent.** No vendor contract is saved under Nanjing University's name. The GitLab, BookStack, Seafile, SeaTable and Vaultwarden APIs are those products' engineering — NJU operates the deployments, and only the deployments are recorded. The Summon discovery instance the library still links (`nju.summon.serialssolutions.com`) returns 404 on every path and is not recorded as a live surface. NJU is not a Crossref member and not a DataCite client; the only Crossref member matching a "Nanjing University" query is Nanjing University of Aeronautics and Astronautics, a different institution, and it is not attributed here.
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 17.3 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 33.3 |
+| Access clarity | 28.9 |
 
-**Gated is not absent.** Three surfaces are live but closed to outside clients and are recorded as findings rather than gaps: the library OPAC returns 403 "请使用南大VPN访问!" on every route, `git.nju.edu.cn` answers non-browser clients with an Anubis proof-of-work challenge, and `data.nju.edu.cn` and `elearning.nju.edu.cn` return HTTP 483 WAF maintenance pages that could not be read from outside China. One host is a false lead worth naming: `api.nju.edu.cn` returns HTTP 200 and the body is the stock Apache Tomcat 8.5.98 welcome page.
+**Agent readiness 3.1** — human-only
 
-**Supersedes the June 2026 profile,** which recorded only a CAS login page and the library website and concluded that no public API surface existed. That held for "API programme" and did not hold for "machine-readable surface". See [review.yml](review.yml).
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
 
-## Maintainers
+**Regulatory alignment 16.7** — Education & Research
 
-- Kin Lane — kin@apievangelist.com
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/nanjing/](https://apis.io/providers/nanjing/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Nanjing University: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/nanjing/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
